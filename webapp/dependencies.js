@@ -1316,19 +1316,26 @@ function ones() {
 
 function size() {
 
-    if (arguments.length == 1)
-        return math.size(arguments[0])
+
+    if (arguments.length == 1){
+        var res = math.size(arguments[0]);
+        if(arguments[0].length == undefined)
+            res.push(1)
+        return res;
+    }
     else {
         var res = math.size(arguments[0]);
+        if(arguments[0].length == undefined)
+            res = [1]
 
         if (res.length == 1)
             res.push(1);
 
         switch (arguments[1]) {
-            case 'r':
+            case 'r': return res[0];
             case 1:
                 return res[0];
-            case 'c':
+            case 'c': return res[1];
             case 2:
                 return res[1];
             case '*':
@@ -1339,25 +1346,97 @@ function size() {
     }
 }
 
+ 
+
+function Min(){
+    var array = arguments[0];
+    var min = array[0];
+    for (var i = array.length - 1; i >= 0; i--) {
+        if(array[i]<min)
+            min=array[i];
+    }
+    return min;
+}
+
+function sum(){
+    var sum = 0;
+    var matrix = arguments[0]
+    for (var i = 0; i < matrix.length; i++) {
+        sum+=parseInt(matrix[i]);
+    } 
+    return sum;  
+}
+
+function Or(){
+    var array = arguments[0];
+    var value = false;
+    for (var i = array.length - 1; i >= 0; i--) {
+        value = value || (array[i] == 'true');
+    } 
+    return value;
+}
+
+function Not(){
+    var array = arguments[0];
+    var result=[];
+    for (var i = array.length - 1; i >= 0; i--) {
+        result[i] = !array[i];
+    } 
+    return result;
+}
+
+function compare(){//will return an array of boolean values "compares if array1>array2"
+    var array1=arguments[0];
+    var array2=arguments[1];
+    var operation = arguments[2];
+    var result=[];
+    switch(operation){
+        case 1:
+            for (var i = array1.length - 1; i >= 0; i--) {
+                result[i] = array1[i]>array2[i];
+            }
+        break;
+        case 2:
+            for (var i = array1.length - 1; i >= 0; i--) {
+                result[i] = array1[i]<array2[i];
+            }
+        break;
+        case 3:
+            for (var i = array1.length - 1; i >= 0; i--) {
+                result[i] = array1[i]==array2[i];
+            }
+        break;
+
+    }
+    return result;    
+}
+
 function inverse() {
     var str = "[["
     var arg = arguments[0];
-    arg = arg.replace(/ /g, "],[");
-    str += arg + "]]";
+    if(arg != "[]"){
+        arg = arg.replace(/ /g, "],[");
+        str += arg + "]]";
+    }else{
+        str = "[]"
+    }
     var array = JSON.parse(str);
     return array;
 }
 
+
+//function updated (8/6/17) to get ascii values for char
+//previous code is commented
 function _str2code() {
-    var conversion = "0123456789abcdefghijklmnopqrstuvwxyz_#!$ ();:+-*/\\=.,'[]%|&<>~^";
-    var conversion2 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ00?0 00000000$000\"{}000`0@0r";
+    // var conversion = "0123456789abcdefghijklmnopqrstuvwxyz_#!$ ();:+-*/\\=.,'[]%|&<>~^";
+    // var conversion2 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ00?0 00000000$000\"{}000`0@0r";
     var str = arguments[0];
     var code = [];
     for (var i = 0; i < str.length; i++) {
-        code[i] = [conversion.indexOf(str[i])];
-        if (code[i] == -1) {
-            code[i] = [conversion2.indexOf(str[i]) * -1];
-        }
+        code[i] = [str.charCodeAt(i)];
+        // if (code[i] == -1) {
+        //     code[i] = [conversion2.indexOf(str[i]) * -1];
+        // }
     }
     return code;
 }
